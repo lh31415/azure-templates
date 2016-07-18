@@ -225,24 +225,6 @@
 						    "uri" : "[concat(variables('osDiskVhdName'),'-vm','.datadisk2.vhd')]"
                         },
                         "createOption": "Empty"
-                    },
-                    {
-                        "name": "datadisk3",
-                        "diskSizeGB": "100",
-                        "lun": 2,
-                        "vhd": {
-						    "uri" : "[concat(variables('osDiskVhdName'),'-vm','.datadisk3.vhd')]"
-                        },
-                        "createOption": "Empty"
-                    },
-                    {
-                        "name": "datadisk4",
-                        "diskSizeGB": "100",
-                        "lun": 3,
-                        "vhd": {
-						    "uri" : "[concat(variables('osDiskVhdName'),'-vm','.datadisk4.vhd')]"
-                        },
-                        "createOption": "Empty"
                     }
                 ]
 			},
