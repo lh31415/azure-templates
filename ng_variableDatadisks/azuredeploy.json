@@ -66,7 +66,7 @@
 		},
 		"vmSize": {
 			"type": "string",
-			"defaultValue" : "Standard_A0",
+			"defaultValue" : "Standard_A2",
 			"metadata": {
 				"description": "This is the size of your VM"
 			}
@@ -214,6 +214,33 @@
                         "lun": 0,
                         "vhd": {
 						    "uri" : "[concat(variables('osDiskVhdName'),'-vm','.datadisk1.vhd')]"
+                        },
+                        "createOption": "Empty"
+                    },
+                    {
+                        "name": "datadisk2",
+                        "diskSizeGB": "100",
+                        "lun": 0,
+                        "vhd": {
+						    "uri" : "[concat(variables('osDiskVhdName'),'-vm','.datadisk2.vhd')]"
+                        },
+                        "createOption": "Empty"
+                    },
+                    {
+                        "name": "datadisk3",
+                        "diskSizeGB": "100",
+                        "lun": 0,
+                        "vhd": {
+						    "uri" : "[concat(variables('osDiskVhdName'),'-vm','.datadisk3.vhd')]"
+                        },
+                        "createOption": "Empty"
+                    },
+                    {
+                        "name": "datadisk4",
+                        "diskSizeGB": "100",
+                        "lun": 0,
+                        "vhd": {
+						    "uri" : "[concat(variables('osDiskVhdName'),'-vm','.datadisk4.vhd')]"
                         },
                         "createOption": "Empty"
                     }
