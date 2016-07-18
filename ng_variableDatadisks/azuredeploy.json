@@ -220,7 +220,7 @@
                     {
                         "name": "datadisk2",
                         "diskSizeGB": "100",
-                        "lun": 0,
+                        "lun": 1,
                         "vhd": {
 						    "uri" : "[concat(variables('osDiskVhdName'),'-vm','.datadisk2.vhd')]"
                         },
@@ -229,7 +229,7 @@
                     {
                         "name": "datadisk3",
                         "diskSizeGB": "100",
-                        "lun": 0,
+                        "lun": 2,
                         "vhd": {
 						    "uri" : "[concat(variables('osDiskVhdName'),'-vm','.datadisk3.vhd')]"
                         },
@@ -238,7 +238,7 @@
                     {
                         "name": "datadisk4",
                         "diskSizeGB": "100",
-                        "lun": 0,
+                        "lun": 3,
                         "vhd": {
 						    "uri" : "[concat(variables('osDiskVhdName'),'-vm','.datadisk4.vhd')]"
                         },
