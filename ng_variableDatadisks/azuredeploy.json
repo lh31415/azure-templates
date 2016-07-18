@@ -115,7 +115,19 @@
 		"lbPoolID": "[concat(variables('lbID'),'/backendAddressPools/BackendPool1')]",
 		"lbSSLProbeID": "[concat(variables('lbID'),'/probes/tcpSSLProbe')]",
 		"lbVPNProbeID": "[concat(variables('lbID'),'/probes/tcpVPNProbe')]",
-		"osDiskVhdName" : "[concat('http://',parameters('userImageStorageAccountName'),'.blob.core.windows.net/',parameters('userImageStorageContainerName'),'/',parameters('vmName'),'osDisk')]"
+		"osDiskVhdName" : "[concat('http://',parameters('userImageStorageAccountName'),'.blob.core.windows.net/',parameters('userImageStorageContainerName'),'/',parameters('vmName'),'osDisk')]",
+        "diskArray": [
+            {
+                "name": "datadisk1",
+                "lun": 0,
+                "vhd": {
+                    "uri": "[concat('http://',parameters('userImageStorageAccountName'),'.blob.core.windows.net/',parameters('userImageStorageContainerName'),'/','datadisk1.vhd')]"
+                },
+                "createOption": "Empty",
+                "caching": "ReadWrite",
+                "diskSizeGB": "100"
+            }
+        ]
 	},
 	"resources": [
 	{
@@ -207,6 +219,7 @@
 						"uri" : "[concat(variables('osDiskVhdName'),'-vm','.vhd')]"
 					}
 				}
+                "dataDisks": "[take(variables('diskArray').parameters('numDataDisks'))]"
 			},
 			"networkProfile": {
 				"networkInterfaces" : [
