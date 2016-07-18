@@ -213,7 +213,7 @@
                         "diskSizeGB": "100",
                         "lun": 0,
                         "vhd": {
-						    "uri" : "[concat(variables('osDiskVhdName'),'-vm','.vhd')]"
+						    "uri" : "[concat(variables('osDiskVhdName'),'-vm','.datadisk1.vhd')]"
                         },
                         "createOption": "Empty"
                     }
