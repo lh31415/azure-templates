@@ -211,7 +211,7 @@
                     {
                         "name": "datadisk4",
                         "diskSizeGB": "100",
-                        "lun": 3,
+                        "lun": 0,
                         "vhd": {
 						    "uri" : "[concat(variables('osDiskVhdName'),'-vm','.datadisk4.vhd')]"
                         },
