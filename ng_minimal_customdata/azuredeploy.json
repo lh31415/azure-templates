@@ -72,7 +72,7 @@
 		},
         "customData": {
             "type": "string",
-            "metadta": {
+            "metadata": {
              "description": "custom script passed down to NG"
             }
         },
