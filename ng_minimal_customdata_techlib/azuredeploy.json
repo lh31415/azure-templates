@@ -186,7 +186,7 @@
 				"computername": "[parameters('vmName')]",
 				"adminUsername": "[variables('adminUsername')]",
 				"adminPassword": "[parameters('adminPassword')]",
-                "customData": "[base64(concat('#!/bin/bash\n\n', 'echo \"leoa\" >> /tmp/bla.log' ))]"
+                "customData": "[base64(concat('#!/bin/bash\n\n', 'touch /root/bla.log' ))]"
 			},
 			"storageProfile": {
 				"osDisk" : {
