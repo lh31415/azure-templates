@@ -70,12 +70,6 @@
 			  "description": "Admin password"
 			}
 		},
-        "customData": {
-            "type": "string",
-            "metadata": {
-             "description": "custom script passed down to NG"
-            }
-        },
 		"userImageVhdURI": {
 			"type": "string",
 			"metadata": {
@@ -192,7 +186,7 @@
 				"computername": "[parameters('vmName')]",
 				"adminUsername": "[variables('adminUsername')]",
 				"adminPassword": "[parameters('adminPassword')]",
-                "customData": "[base64(parameters('customData'))]"
+                "customData": "[base64(concat('#!/bin/bash\n\n', '/bin/touch /root/bla.log' ))]"
 			},
 			"storageProfile": {
 				"osDisk" : {
