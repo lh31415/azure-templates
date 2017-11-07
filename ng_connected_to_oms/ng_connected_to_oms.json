@@ -1,0 +1,1061 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "userImageVhdUri": {
+            "type": "String",
+            "metadata": {
+                "description": "URL of the VHD image to deploy."
+            }
+        },
+        "storageAccountName": {
+            "defaultValue": "barracudangnightlyarm",
+            "type": "String",
+            "metadata": {
+                "description": "Name of the storage account that will hold the newly created resources."
+            }
+        },
+        "storageContainerName": {
+            "defaultValue": "osdisks",
+            "type": "String",
+            "metadata": {
+                "description": "Name of the container in the storage account."
+            }
+        },
+        "vmName": {
+            "type": "String",
+            "metadata": {
+                "description": "Name for the virtual machine."
+            }
+        },
+        "virtualNetName": {
+            "defaultValue": "ial-rm-net-00",
+            "type": "String",
+            "metadata": {
+                "description": "Name of the virtual network in which to deploy the virtual machine."
+            }
+        },
+        "virtualNetPrefix": {
+            "defaultValue": "10.0.0.0/16",
+            "type": "String",
+            "metadata": {
+                "description": "Virtual network address prefix in CIDR format."
+            }
+        },
+        "subNetName": {
+            "defaultValue": "ial-rm-subnet-00",
+            "type": "String",
+            "metadata": {
+                "description": "Name of the subnetwork in which to deploy the virtual machine."
+            }
+        },
+        "subNetPrefix": {
+            "defaultValue": "10.0.0.0/24",
+            "type": "String",
+            "metadata": {
+                "description": "Subnetwork address prefix in CIDR format."
+            }
+        },
+        "dnsNameForPublicIP": {
+            "type": "String",
+            "metadata": {
+                "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
+            }
+        },
+        "authenticationType": {
+            "defaultValue": "Password",
+            "allowedValues": [
+                "Password",
+                "PublicKey",
+                "PasswordAndPublicKey"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "Authentication type."
+            }
+        },
+        "adminPassword": {
+            "defaultValue": "",
+            "type": "SecureString",
+            "metadata": {
+                "description": "Password for the Virtual Machine."
+            }
+        },
+        "adminSshPubKey": {
+            "defaultValue": "",
+            "type": "String",
+            "metadata": {
+                "description": "OpenSsh public key for the admin account (as string)."
+            }
+        },
+        "location": {
+            "defaultValue": "West Europe",
+            "allowedValues": [
+                "North Europe",
+                "West Europe",
+                "Germany Central",
+                "Germany Northeast",
+                "UK West",
+                "UK South",
+                "France Central",
+                "France South",
+                "East US",
+                "East US 2",
+                "Central US",
+                "North Central US",
+                "South Central US",
+                "West Central US",
+                "West US",
+                "West US 2",
+                "US Gov Virginia",
+                "US Gov Iowa",
+                "Canada East",
+                "Canada Central",
+                "Brazil South",
+                "US DoD East",
+                "US DoD Central",
+                "US Gov Arizona",
+                "US Gov Texas",
+                "Southeast Asia",
+                "East Asia",
+                "Australia East",
+                "Australia Southeast",
+                "Central India",
+                "West India",
+                "South India",
+                "Japan East",
+                "Japan West",
+                "China East",
+                "China North",
+                "Korea Central",
+                "Korea South"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "Location of the virtual machine."
+            }
+        },
+        "vmSize": {
+            "defaultValue": "Standard_A1",
+            "allowedValues": [
+                "Standard_A0",
+                "Standard_A1",
+                "Standard_A2",
+                "Standard_A3",
+                "Standard_A4",
+                "Standard_A5",
+                "Standard_A6",
+                "Standard_A7",
+                "Standard_A8",
+                "Standard_A9",
+                "Standard_A10",
+                "Standard_A11",
+                "Standard_A1_v2",
+                "Standard_A2_v2",
+                "Standard_A4_v2",
+                "Standard_A8_v2",
+                "Standard_A2m_v2",
+                "Standard_A4m_v2",
+                "Standard_A8m_v2",
+                "Standard_D1",
+                "Standard_D2",
+                "Standard_D3",
+                "Standard_D4",
+                "Standard_D11",
+                "Standard_D12",
+                "Standard_D13",
+                "Standard_D14",
+                "Standard_D1_v2",
+                "Standard_D2_v2",
+                "Standard_D3_v2",
+                "Standard_D4_v2",
+                "Standard_D5_v2",
+                "Standard_D11_v2",
+                "Standard_D12_v2",
+                "Standard_D13_v2",
+                "Standard_D14_v2",
+                "Standard_D15_v2",
+                "Standard_DS1",
+                "Standard_DS2",
+                "Standard_DS3",
+                "Standard_DS4",
+                "Standard_DS11",
+                "Standard_DS12",
+                "Standard_DS13",
+                "Standard_DS14",
+                "Standard_DS1_v2",
+                "Standard_DS2_v2",
+                "Standard_DS3_v2",
+                "Standard_DS4_v2",
+                "Standard_DS5_v2",
+                "Standard_DS11_v2",
+                "Standard_DS12_v2",
+                "Standard_DS13_v2",
+                "Standard_DS14_v2",
+                "Standard_DS15_v2",
+                "Standard_F1",
+                "Standard_F2",
+                "Standard_F4",
+                "Standard_F8",
+                "Standard_F16",
+                "Standard_F1s",
+                "Standard_F2s",
+                "Standard_F4s",
+                "Standard_F8s",
+                "Standard_F16s",
+                "Standard_G1",
+                "Standard_G2",
+                "Standard_G3",
+                "Standard_G4",
+                "Standard_G5",
+                "Standard_GS1",
+                "Standard_GS2",
+                "Standard_GS3",
+                "Standard_GS4",
+                "Standard_GS5",
+                "Standard_H8",
+                "Standard_H16",
+                "Standard_H8m",
+                "Standard_H16m",
+                "Standard_H16r",
+                "Standard_H16mr",
+                "Standard_NV6",
+                "Standard_NV12",
+                "Standard_NV24",
+                "Standard_NC6",
+                "Standard_NC12",
+                "Standard_NC24",
+                "Standard_NC24r"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "Virtual machine size."
+            }
+        },
+        "osType": {
+            "defaultValue": "linux",
+            "allowedValues": [
+                "windows",
+                "linux"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "OS that the virtual machine will be running."
+            }
+        },
+        "numDataDisks": {
+            "defaultValue": 0,
+            "maxValue": 64,
+            "type": "Int",
+            "metadata": {
+                "description": "Number of data disks."
+            }
+        },
+        "sizeOfDataDisksInGB": {
+            "defaultValue": 10,
+            "maxValue": 32767,
+            "type": "Int",
+            "metadata": {
+                "description": "Size of data disks (in GB)."
+            }
+        },
+        "omsWorkspaceName": {
+            "type": "String",
+            "metadata": {
+                "description": "Name of the OMS workspace"
+            }
+        }
+    },
+    "variables": {
+        "publicIPAddressName": "[concat(parameters('vmName'), '-publicIP')]",
+        "publicIPAddressType": "Dynamic",
+        "nicName": "[concat(parameters('vmName'), '-networkInterface')]",
+        "vnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetName'))]",
+        "subNetID": "[concat(variables('vnetID'), '/subnets/', parameters('subNetName'))]",
+        "customData": "[base64('#!/bin/bash\nexit 0')]",
+        "osProfilePassword": {
+            "computername": "[parameters('vmName')]",
+            "adminUsername": "azureuser",
+            "adminPassword": "[parameters('adminPassword')]",
+            "customData": "[variables('customData')]"
+        },
+        "osProfilePublicKey": {
+            "computername": "[parameters('vmName')]",
+            "adminUsername": "azureuser",
+            "linuxConfiguration": {
+                "disablePasswordAuthentication": "true",
+                "ssh": {
+                    "publicKeys": [
+                        {
+                            "path": "/home/azureuser/.ssh/authorized_keys",
+                            "keyData": "[parameters('adminSshPubKey')]"
+                        }
+                    ]
+                }
+            },
+            "customData": "[variables('customData')]"
+        },
+        "osProfilePasswordAndPublicKey": {
+            "computername": "[parameters('vmName')]",
+            "adminUsername": "azureuser",
+            "adminPassword": "[parameters('adminPassword')]",
+            "linuxConfiguration": {
+                "disablePasswordAuthentication": "false",
+                "ssh": {
+                    "publicKeys": [
+                        {
+                            "path": "/home/azureuser/.ssh/authorized_keys",
+                            "keyData": "[parameters('adminSshPubKey')]"
+                        }
+                    ]
+                }
+            },
+            "customData": "[variables('customData')]"
+        },
+        "osProfile": "[variables(concat('osProfile', parameters('authenticationType')))]",
+        "storageContainerUri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net/', parameters('storageContainerName'))]",
+        "osDiskVhdName": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-osDisk.vhd')]",
+        "dataDisksArray": [
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk00')]",
+                "lun": 0,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk00.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk01')]",
+                "lun": 1,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk01.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk02')]",
+                "lun": 2,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk02.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk03')]",
+                "lun": 3,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk03.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk04')]",
+                "lun": 4,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk04.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk05')]",
+                "lun": 5,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk05.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk06')]",
+                "lun": 6,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk06.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk07')]",
+                "lun": 7,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk07.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk08')]",
+                "lun": 8,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk08.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk09')]",
+                "lun": 9,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk09.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk10')]",
+                "lun": 10,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk10.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk11')]",
+                "lun": 11,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk11.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk12')]",
+                "lun": 12,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk12.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk13')]",
+                "lun": 13,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk13.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk14')]",
+                "lun": 14,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk14.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk15')]",
+                "lun": 15,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk15.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk16')]",
+                "lun": 16,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk16.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk17')]",
+                "lun": 17,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk17.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk18')]",
+                "lun": 18,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk18.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk19')]",
+                "lun": 19,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk19.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk20')]",
+                "lun": 20,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk20.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk21')]",
+                "lun": 21,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk21.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk22')]",
+                "lun": 22,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk22.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk23')]",
+                "lun": 23,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk23.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk24')]",
+                "lun": 24,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk24.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk25')]",
+                "lun": 25,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk25.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk26')]",
+                "lun": 26,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk26.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk27')]",
+                "lun": 27,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk27.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk28')]",
+                "lun": 28,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk28.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk29')]",
+                "lun": 29,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk29.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk30')]",
+                "lun": 30,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk30.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk31')]",
+                "lun": 31,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk31.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk32')]",
+                "lun": 32,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk32.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk33')]",
+                "lun": 33,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk33.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk34')]",
+                "lun": 34,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk34.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk35')]",
+                "lun": 35,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk35.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk36')]",
+                "lun": 36,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk36.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk37')]",
+                "lun": 37,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk37.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk38')]",
+                "lun": 38,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk38.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk39')]",
+                "lun": 39,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk39.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk40')]",
+                "lun": 40,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk40.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk41')]",
+                "lun": 41,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk41.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk42')]",
+                "lun": 42,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk42.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk43')]",
+                "lun": 43,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk43.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk44')]",
+                "lun": 44,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk44.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk45')]",
+                "lun": 45,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk45.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk46')]",
+                "lun": 46,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk46.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk47')]",
+                "lun": 47,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk47.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk48')]",
+                "lun": 48,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk48.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk49')]",
+                "lun": 49,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk49.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk50')]",
+                "lun": 50,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk50.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk51')]",
+                "lun": 51,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk51.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk52')]",
+                "lun": 52,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk52.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk53')]",
+                "lun": 53,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk53.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk54')]",
+                "lun": 54,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk54.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk55')]",
+                "lun": 55,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk55.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk56')]",
+                "lun": 56,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk56.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk57')]",
+                "lun": 57,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk57.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk58')]",
+                "lun": 58,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk58.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk59')]",
+                "lun": 59,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk59.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk60')]",
+                "lun": 60,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk60.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk61')]",
+                "lun": 61,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk61.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk62')]",
+                "lun": 62,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk62.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            },
+            {
+                "name": "[concat(parameters('vmName'), '-dataDisk63')]",
+                "lun": 63,
+                "vhd": {
+                    "uri": "[concat(variables('storageContainerUri'), '/', parameters('vmName'), '-dataDisk63.vhd')]"
+                },
+                "createOption": "Empty",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+            }
+        ],
+        "SecurityAndAuditSolution": {
+            "Name": "[Concat('Security', '(', parameters('omsWorkspaceName'), ')')]",
+            "GalleryName": "Security"
+        },
+        "LogAnalyticsApiVersion": "2017-03-15-preview"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[variables('publicIPAddressName')]",
+            "apiVersion": "2015-06-15",
+            "location": "[parameters('location')]",
+            "properties": {
+                "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+                "dnsSettings": {
+                    "domainNameLabel": "[parameters('dnsNameForPublicIP')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetName')]",
+            "apiVersion": "2015-06-15",
+            "location": "[parameters('location')]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('virtualNetPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('subNetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('subNetPrefix')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[variables('nicName')]",
+            "apiVersion": "2015-06-15",
+            "location": "[parameters('location')]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
+                            },
+                            "subnet": {
+                                "id": "[variables('subNetID')]"
+                            }
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetName'))]",
+                "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('vmName')]",
+            "apiVersion": "2015-06-15",
+            "location": "[parameters('location')]",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmSize')]"
+                },
+                "osProfile": "[variables('osProfile')]",
+                "storageProfile": {
+                    "osDisk": {
+                        "name": "[concat(parameters('vmName'), '-osDisk')]",
+                        "osType": "[parameters('osType')]",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage",
+                        "image": {
+                            "uri": "[parameters('userImageVhdUri')]"
+                        },
+                        "vhd": {
+                            "uri": "[variables('osDiskVhdName')]"
+                        }
+                    },
+                    "dataDisks": "[take(variables('dataDisksArray'), parameters('numDataDisks'))]"
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net')]"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+                        }
+                    ]
+                }
+            },
+            "resources": [
+                {
+                    "type": "Microsoft.Compute/virtualMachines/extensions",
+                    "name": "[concat(parameters('vmName'), '/Microsoft.EnterpriseCloud.Monitoring')]",
+                    "apiVersion": "2017-03-30",
+                    "location": "[resourceGroup().location]",
+                    "properties": {
+                        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                        "type": "OmsAgentForLinux",
+                        "typeHandlerVersion": "1.0",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName')), variables('LogAnalyticsApiVersion')).customerId]"
+                        },
+                        "protectedSettings": {
+                            "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName')), variables('LogAnalyticsApiVersion')).primarySharedKey]"
+                        }
+                    },
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+                    ]
+                }
+            ],
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "name": "[parameters('omsWorkspaceName')]",
+            "apiVersion": "[variables('LogAnalyticsApiVersion')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "sku": {
+                    "Name": "Free"
+                }
+            },
+            "resources": [
+                {
+                    "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationsManagement/solutions/', variables('SecurityAndAuditSolution').Name)]",
+                    "type": "Microsoft.OperationsManagement/solutions",
+                    "name": "[variables('SecurityAndAuditSolution').Name]",
+                    "apiVersion": "2015-11-01-preview",
+                    "location": "[parameters('location')]",
+                    "plan": {
+                        "name": "[variables('SecurityAndAuditSolution').Name]",
+                        "publisher": "Microsoft",
+                        "product": "[Concat('OMSGallery/', variables('SecurityAndAuditSolution').GalleryName)]",
+                        "promotionCode": ""
+                    },
+                    "properties": {
+                        "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]"
+                    },
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]"
+                    ]
+                }
+            ]
+        }
+    ]
+}
